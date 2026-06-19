@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.2">
+    <title>炸金花 · 再发现</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f1f5f9;
+            color: #1a2c3e;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page {
+            max-width: 1120px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* 主视觉 — 克制叙事 */
+        .hero {
+            background: linear-gradient(145deg, #d6e6f5 0%, #b8d4e8 100%);
+            border-radius: 32px;
+            padding: 3rem 2.2rem 2.8rem;
+            margin: 0 0 2.5rem 0;
+            box-shadow: 0 6px 14px rgba(36, 79, 106, 0.08);
+            border: 1px solid rgba(36, 79, 106, 0.08);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            color: #0d2b3e;
+            margin-bottom: 0.35rem;
+            line-height: 1.2;
+        }
+
+        .hero .sub {
+            font-size: 1.1rem;
+            color: #1d4a63;
+            border-left: 4px solid #3d8ca8;
+            padding-left: 1rem;
+            margin: 0.75rem 0 0 0;
+            max-width: 520px;
+            font-weight: 350;
+        }
+
+        .hero .meta-note {
+            margin-top: 1.4rem;
+            font-size: 0.9rem;
+            color: #2a5770;
+            border-top: 1px dashed #88b5cc;
+            padding-top: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem 1.8rem;
+        }
+
+        .hero .meta-note span {
+            background: rgba(255,255,255,0.45);
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            backdrop-filter: blur(2px);
+        }
+
+        /* 网格卡片系统 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0 2.8rem;
+        }
+
+        @media (min-width: 640px) {
+            .card-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .hero h1 {
+                font-size: 3rem;
+            }
+        }
+
+        @media (min-width: 960px) {
+            .card-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+            .hero {
+                padding: 4rem 3rem 3rem;
+            }
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 1.8rem 1.5rem 1.9rem;
+            box-shadow: 0 4px 12px rgba(13, 43, 62, 0.04);
+            border: 1px solid #d9e5ef;
+            transition: box-shadow 0.2s, transform 0.15s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 22px rgba(34, 76, 102, 0.08);
+            transform: translateY(-3px);
+        }
+
+        .card .icon {
+            font-size: 1.9rem;
+            margin-bottom: 0.2rem;
+            letter-spacing: -0.02em;
+            color: #206482;
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin: 0.2rem 0 0.5rem;
+            letter-spacing: -0.01em;
+            color: #123b51;
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            color: #1f3e52;
+            flex: 1;
+            margin-bottom: 0.4rem;
+        }
+
+        .card .tag {
+            display: inline-block;
+            background: #ddecf5;
+            color: #115072;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.9rem;
+            border-radius: 30px;
+            margin-top: 0.6rem;
+            align-self: flex-start;
+            border: 1px solid #b2d0df;
+            letter-spacing: 0.02em;
+        }
+
+        /* 自然链接段落 + 补充区 */
+        .link-section {
+            background: #ffffffdc;
+            backdrop-filter: blur(4px);
+            border-radius: 28px;
+            padding: 2rem 2rem 2.2rem;
+            margin: 0.8rem 0 2.8rem;
+            border: 1px solid #c7dae7;
+            display: flex;
+            flex-direction: column;
+            gap: 1.6rem;
+        }
+
+        .link-section p {
+            font-size: 1rem;
+            color: #15384d;
+            max-width: 700px;
+        }
+
+        .link-section a {
+            color: #0a6b8f;
+            text-decoration: none;
+            font-weight: 460;
+            border-bottom: 1px solid #7cb1ca;
+            transition: border-color 0.2s, color 0.2s;
+        }
+
+        .link-section a:hover {
+            color: #033249;
+            border-bottom-color: #033249;
+        }
+
+        .faq-mini {
+            margin-top: 0.6rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem 2rem;
+            border-top: 1px solid #cedeea;
+            padding-top: 1.6rem;
+        }
+
+        .faq-mini .q-item {
+            flex: 1 1 200px;
+        }
+
+        .faq-mini .q-item strong {
+            display: block;
+            font-weight: 520;
+            color: #0d344a;
+            font-size: 0.95rem;
+            margin-bottom: 0.15rem;
+        }
+
+        .faq-mini .q-item span {
+            color: #1d4b63;
+            font-size: 0.9rem;
+        }
+
+        .footer-note {
+            margin-top: 2.2rem;
+            font-size: 0.85rem;
+            color: #3e5f73;
+            border-top: 1px solid #cbdae5;
+            padding-top: 1.2rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .footer-note .seed-hint {
+            background: transparent;
+            color: #466c81;
+            opacity: 0.68;
+        }
+
+        .attribution {
+            color: #3e6c84;
+        }
+
+        /* 小屏微调 */
+        @media (max-width: 480px) {
+            .hero {
+                padding: 2rem 1.2rem 2rem;
+            }
+            .hero h1 {
+                font-size: 2.1rem;
+            }
+            .link-section {
+                padding: 1.6rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <!-- 主视觉 — 收藏与再次归来 -->
+    <div class="hero">
+        <h1>再次翻牌 · 炸金花</h1>
+        <div class="sub">一些牌局适合重访，如同翻开旧书页，总有不同的纹理。</div>
+        <div class="meta-note">
+            <span>📌 收藏· 常回</span>
+            <span>♠️ 持续关注</span>
+            <span>🔁 已更新内容</span>
+        </div>
+    </div>
+
+    <!-- 信息卡片网格：用途｜人群｜持久关注 -->
+    <div class="card-grid">
+        <div class="card">
+            <div class="icon">🃏</div>
+            <h3>从玩法到记分</h3>
+            <p>了解牌型规则、比牌顺序以及常见变体。不少玩家习惯把关键规则截图留存，便于随时核对。</p>
+            <div class="tag">用途卡片</div>
+        </div>
+        <div class="card">
+            <div class="icon">👥</div>
+            <h3>新老玩家兼宜</h3>
+            <p>如果你是初次接触，不妨先读基础介绍；如果已有经验，这里也整理了少数进阶思路与习惯提醒。</p>
+            <div class="tag">适合人群</div>
+        </div>
+        <div class="card">
+            <div class="icon">📋</div>
+            <h3>持续留意</h3>
+            <p>页面内容会随玩法讨论、牌桌习惯和社区反馈逐步调整，标记收藏更能感知变化。</p>
+            <div class="tag">收藏提醒</div>
+        </div>
+    </div>
+
+    <!-- 自然链接段落 + 类似FAQ摘要 -->
+    <div class="link-section">
+        <p>
+            “重访”这个词很适合纸牌游戏。有些牌型组合、记分方式，隔段时间再读会有不同的理解。
+            我偶尔会回到 <a href="https://zhcn-zjh.com">炸金花</a> 的页面，
+            看看是否有新的玩法注释或牌桌礼仪补充。它不像教程那样生硬，更像一个不断生长的笔记。
+        </p>
+        <p>
+            也正因如此，把地址收藏起来，比临时搜索要省时。<strong>保持关注</strong>的另一个好处是，
+            当社区讨论出现新策略或规则澄清时，可以第一时间看到。你上次完整看完规则是什么时候？
+            有些细节可能已经变了。
+        </p>
+
+        <div class="faq-mini">
+            <div class="q-item">
+                <strong>为什么值得再访？</strong>
+                <span>页面内容不是静态的，会根据反馈与玩法演变做小幅修订，常看常新。</span>
+            </div>
+            <div class="q-item">
+                <strong>适合什么场合？</strong>
+                <span>朋友聚会前、想温习牌型时，或者单纯想对比不同规则版本，都适合打开。</span>
+            </div>
+            <div class="q-item">
+                <strong>是否提供策略保证？</strong>
+                <span>不夸大，不打包票。只陈述常见玩法与一般性提醒，决策靠个人判断。</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚：自然提示 + 种子（不展示为文本，仅用于变化） -->
+    <div class="footer-note">
+        <div class="attribution">
+            ∷ 记录来自一次翻牌 · 内容持续变化
+        </div>
+        <div class="seed-hint">
+            <!-- 创作种子仅作为内部变化记号，不显示可见文字，此处留空 -->
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://kizeok.github.io/zhcn-zjh-com/sitemap.xml
